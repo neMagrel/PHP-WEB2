@@ -9,7 +9,7 @@ function classifyAge(int $age): string {
 
     else: return "Взрослый"
 }
-
+$cities = []
 function fiveCities(array $cities): void {
-    
+
 }
