@@ -1,5 +1,4 @@
 <?php
-echo "<h2>Page by Magrel</h2>\n";
 
 //Задание 1: Функция классификации возраста
 function classifyAge(int $age): string {
@@ -66,28 +65,34 @@ function classifyAgeMatch(int $age): string {
 //--------------------------------------------------------------
 
 // Тестирование
+echo "<h2>Page by Magrel</h2>\n";
 echo "<h3>1. classifyAge</h3>\n";
 foreach ([8, 15, 25] as $a) echo "$a → ", classifyAge($a), "<br>\n";
 
+echo "<h2>Page by Magrel</h2>\n";
 echo "<h3>2. Города</h3>\n";
 $cities = ['Москва', 'СПб', 'Новосиб', 'Екб', 'Казань'];
 printCitiesAsList($cities);
 
+echo "<h2>Page by Magrel</h2>\n";
 echo "<h3>3. FizzBuzz (1–15)</h3>\n";
 $fizz = fizzBuzz(15);
 foreach ($fizz as $i => $v) echo ($i+1), " → $v<br>\n";
 
+echo "<h2>Page by Magrel</h2>\n";
 echo "<h3>4. °C → °F</h3>\n";
 foreach ([0, 25, -10, 100] as $c) {
     $f = convertCelsiusToFahrenheit($c);
     echo "{$c}°C = {$f}°F<br>\n";
 }
 
+echo "<h2>Page by Magrel</h2>\n";
 echo "<h3>5. getUserName</h3>\n";
 foreach ([1, 'guest', 42] as $id) {
     $res = getUserName($id);
     echo var_export($id, true), " → ", var_export($res, true), "<br>\n";
 }
 
+echo "<h2>Page by Magrel</h2>\n";
 echo "<h3>6. match: classifyAgeMatch</h3>\n";
 foreach ([8, 15, 25] as $a) echo "$a → ", classifyAgeMatch($a), "<br>\n";
