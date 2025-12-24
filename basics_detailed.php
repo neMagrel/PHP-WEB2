@@ -77,7 +77,7 @@ printCitiesAsList($cities);
 echo "<h2>Page by Magrel</h2>\n";
 echo "<h3>3. FizzBuzz (1–15)</h3>\n";
 $fizz = fizzBuzz(15);
-echo $fizz
+// echo $fizz
 foreach ($fizz as $i => $v) echo ($i+1), " → $v<br>\n";
 
 echo "<h2>Page by Magrel</h2>\n";
