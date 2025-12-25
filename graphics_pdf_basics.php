@@ -297,32 +297,15 @@ class InvoicePdf extends FPDF
      * Преобразует UTF-8 строку в Windows-1251 для FPDF.
      *
      * @param string $str Исходная строка в UTF-8
-     * @return string Строка в CP1251 (некорректные символы игнорируются)
+     * @return string Строка в CP1251
      */
     private function utf8ToCp1251(string $str): string
     {
         return iconv('UTF-8', 'CP1251//IGNORE', $str);
     }
 
-    /**
-     * Верхний колонтитул: логотип слева, заголовок по центру.
-     *
-     * @return void
-     */
     public function Header(): void
     {
-        // Подключаем шрифты с явной кодировкой
-
-        $this->AddFont('Arial', '');
-        $this->AddFont('Arial', 'B');
-        $this->AddFont('Arial', 'I');
-        $this->AddFont('Arial', 'BI');
-
-        // $this->AddFont('Arial', '', 'arial.php');
-        // $this->AddFont('Arial', 'B', 'arialb.php');
-        // $this->AddFont('Arial', 'I', 'ariali.php');
-        // $this->AddFont('Arial', 'BI', 'arialbi.php');
-
         $logoPath = __DIR__ . '/logo.png';
         if (file_exists($logoPath)) {
             $this->Image($logoPath, 10, 10, 30);
@@ -332,11 +315,6 @@ class InvoicePdf extends FPDF
         $this->Ln(5);
     }
 
-    /**
-     * Нижний колонтитул: номер страницы по центру.
-     *
-     * @return void
-     */
     public function Footer(): void
     {
         $this->SetY(-15);
@@ -344,20 +322,13 @@ class InvoicePdf extends FPDF
         $this->Cell(0, 10, $this->utf8ToCp1251('Страница ') . $this->PageNo(), 0, 0, 'C');
     }
 
-    /**
-     * Рисует таблицу с рамками.
-     *
-     * @param array $header Массив заголовков (строки)
-     * @param array $data Массив строк (каждая — массив ячеек)
-     * @return void
-     */
     public function buildTable(array $header, array $data): void
     {
         $this->SetFont('Arial', 'B', 10);
-        $colWidths = [80, 40, 40, 30];
+        $colWidths = [70, 30, 30, 30];
 
         foreach ($header as $i => $col) {
-            $w = $colWidths[$i] ?? 40;
+            $w = $colWidths[$i] ?? 30;
             $this->Cell($w, 7, $this->utf8ToCp1251($col), 1, 0, 'C');
         }
         $this->Ln();
@@ -365,19 +336,13 @@ class InvoicePdf extends FPDF
         $this->SetFont('Arial', '', 10);
         foreach ($data as $row) {
             foreach ($row as $i => $cell) {
-                $w = $colWidths[$i] ?? 40;
+                $w = $colWidths[$i] ?? 30;
                 $this->Cell($w, 6, $this->utf8ToCp1251($cell), 1, 0, 'L');
             }
             $this->Ln();
         }
     }
 
-    /**
-     * Генерирует и отправляет PDF-счёт с таблицей и гиперссылкой.
-     *
-     * @param array $items Массив строк [['Товар', 'Кол-во', 'Цена', 'Сумма'], ...]
-     * @return void
-     */
     public function renderInvoice(array $items): void
     {
         $this->AddPage();
@@ -386,14 +351,12 @@ class InvoicePdf extends FPDF
 
         $this->Ln(10);
 
-        $this->SetFont('Arial', 'U', 10);
-        $this->SetTextColor(0, 0, 255);
-        $linkText = $this->utf8ToCp1251('Посетить сайт');
-        $this->Write(5, $linkText);
+        $this->SetFont('Arial', '', 10);
+        $this->Write(5, $this->utf8ToCp1251('Посетить сайт'));
         $this->Link(
-            $this->GetX() - $this->GetStringWidth($linkText),
+            $this->GetX() - $this->GetStringWidth($this->utf8ToCp1251('Посетить сайт')),
             $this->GetY() - 5,
-            $this->GetStringWidth($linkText),
+            $this->GetStringWidth($this->utf8ToCp1251('Посетить сайт')),
             5,
             'https://example.com'
         );
