@@ -243,9 +243,48 @@ foreach ([0, 1, 512000, 1048576, 1048577] as $sz) {
     echo "$sz байт → " . ($res ? '✅' : '❌') . "<br>\n";
 }
 
+// echo "<h2>Page by Magrel</h2>\n";
+// echo "<h3>9. saveUploadedFile — демонстрация (требует $_FILES)</h3>\n";
+// echo "⚠️ Тест через форму невозможен без HTML. См. пример ниже.<br>\n";
+
 echo "<h2>Page by Magrel</h2>\n";
-echo "<h3>9. saveUploadedFile — демонстрация (требует $_FILES)</h3>\n";
-echo "⚠️ Тест через форму невозможен без HTML. См. пример ниже.<br>\n";
+echo "<h3>9. saveUploadedFile — реальный тест (через имитацию $_FILES)</h3>\n";
+
+// --- Подготовка: создаём временный PNG-файл ---
+$tmpInputFile = tempnam(sys_get_temp_dir(), 'magrel_upload_test');
+$pngData = base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==');
+file_put_contents($tmpInputFile, $pngData);
+
+// --- Имитируем $_FILES['avatar'] ---
+$mockFile = [
+    'name'     => 'Фото.JPEG',               // оригинал — .JPEG → должно стать .jpg
+    'type'     => 'image/jpeg',
+    'tmp_name' => $tmpInputFile,
+    'error'    => UPLOAD_ERR_OK,
+    'size'     => filesize($tmpInputFile),
+];
+
+$testUploadDir = __DIR__ . '/../uploads-test';
+
+// --- Тестируем ---
+$savedName = saveUploadedFile($mockFile, $testUploadDir);
+
+echo "Исходное имя: " . escapeHtml($mockFile['name']) . "<br>\n";
+echo "Размер: " . $mockFile['size'] . " байт<br>\n";
+echo "MIME (ожидаем image/jpeg): " . (isValidImageFile($mockFile['tmp_name']) ? '✅' : '❌') . "<br>\n";
+echo "Безопасное имя: " . escapeHtml(generateSafeFileName($mockFile['name'])) . "<br>\n";
+echo "Результат saveUploadedFile(): " . ($savedName !== null
+    ? "✅ '" . escapeHtml($savedName) . "' (сохранён в " . escapeHtml(basename($testUploadDir)) . "/)"
+    : "❌ null"
+) . "<br>\n";
+
+// --- Проверим, что файл действительно сохранён ---
+if ($savedName !== null) {
+    $fullPath = $testUploadDir . '/' . $savedName;
+    echo "Файл существует: " . (file_exists($fullPath) ? '✅' : '❌') . "<br>\n";
+    echo "Размер после сохранения: " . filesize($fullPath) . " байт<br>\n";
+}
+
 
 echo "<h2>Page by Magrel</h2>\n";
 echo "<h3>10. secureSessionStart</h3>\n";
