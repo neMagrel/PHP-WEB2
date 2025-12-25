@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS books (
  */
 function getPdoConnection(string $env = 'dev'): PDO
 {
-    $username = 'magrel';   
+    $username = 'magrel';      
     $password = 'user123';
     $host = 'localhost';
     $dbname = 'library';
@@ -235,7 +235,7 @@ echo "// transferStock(\$id, 1, 2); // Переместить 2 экз. с кн�
 echo "</pre>";
 
 // === Примеры вызовов (для быстрой проверки — раскомментируй при необходимости) ===
-/*
+
 $id = addBook('Мастер и Маргарита', 'Михаил Булгаков', '978-5-17-114701-0', 1967);
 echo "<p>Добавлена книга с ID: $id</p>";
 
@@ -248,6 +248,5 @@ echo "<pre>" . htmlspecialchars(print_r($books, true), ENT_QUOTES | ENT_HTML5, '
 // Проверь transferStock — только если в таблице есть минимум 2 записи с available ≥ amount!
 // transferStock($id, 1, 1);
 // echo "<p>1 экз. перемещён с книги $id на книгу 1</p>";
-*/
 
 ?>
