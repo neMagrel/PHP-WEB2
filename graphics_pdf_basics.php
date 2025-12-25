@@ -292,6 +292,14 @@ function renderSimplePdf(string $message): void
  */
 class InvoicePdf extends FPDF
 {
+    public function AddTtfFont(string $fontName, string $fontPath): void
+    {
+        $this->AddFont($fontName, '', $fontPath);
+        $this->AddFont($fontName, 'B', $fontPath); // жирный
+        $this->AddFont($fontName, 'I', $fontPath); // курсив
+        $this->AddFont($fontName, 'BI', $fontPath); // жирный курсив
+    }
+    
     /**
      * Верхний колонтитул: логотип слева, заголовок по центру.
      *
@@ -303,7 +311,10 @@ class InvoicePdf extends FPDF
         if (file_exists($logoPath)) {
             $this->Image($logoPath, 10, 10, 30);
         }
-        $this->SetFont('Arial', 'B', 16);
+
+        // Подключаем TTF-шрифт
+        $this->AddTtfFont('DejaVu', __DIR__ . '/arial.ttf'); // ← замени arial.ttf на DejaVuSans.ttf если есть
+        $this->SetFont('DejaVu', 'B', 16);
         $this->Cell(0, 10, 'Счёт', 0, 1, 'C');
         $this->Ln(5);
     }
