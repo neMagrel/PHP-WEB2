@@ -312,10 +312,16 @@ class InvoicePdf extends FPDF
     public function Header(): void
     {
         // Подключаем шрифты с явной кодировкой
-        $this->AddFont('Arial', '', 'arial.php', 'cp1251');
-        $this->AddFont('Arial', 'B', 'arialb.php', 'cp1251');
-        $this->AddFont('Arial', 'I', 'ariali.php', 'cp1251');
-        $this->AddFont('Arial', 'BI', 'arialbi.php', 'cp1251');
+
+        $this->AddFont('Arial', '');
+        $this->AddFont('Arial', 'B');
+        $this->AddFont('Arial', 'I');
+        $this->AddFont('Arial', 'BI');
+
+        // $this->AddFont('Arial', '', 'arial.php');
+        // $this->AddFont('Arial', 'B', 'arialb.php');
+        // $this->AddFont('Arial', 'I', 'ariali.php');
+        // $this->AddFont('Arial', 'BI', 'arialbi.php');
 
         $logoPath = __DIR__ . '/logo.png';
         if (file_exists($logoPath)) {
