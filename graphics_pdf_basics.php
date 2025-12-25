@@ -514,7 +514,7 @@ if (!headers_sent()) {
 
     echo "<h2>Page by Magrel</h2>\n";
     echo "<h3>5. getCachedImageOrGenerate() + renderBadge()</h3>\n";
-    echo "Значок: <a href='?type=badge&name=Алексей' target='_blank'>?type=badge&name=Алексей</a><br>\n";
+    echo "Значок: <a href='?type=badge&name=Magrel' target='_blank'>?type=badge&name=Magrel</a><br>\n";
 
     echo "<h2>Page by Magrel</h2>\n";
     echo "<h3>6. renderSimplePdf()</h3>\n";
@@ -546,7 +546,7 @@ if (!headers_sent()) {
 
 // echo "<h2>Page by Magrel</h2>\n";
 // echo "<h3>5. getCachedImageOrGenerate() + renderBadge()</h3>\n";
-// echo "Значок: <a href='?type=badge&name=Алексей' target='_blank'>?type=badge&name=Алексей</a><br>\n";
+// echo "Значок: <a href='?type=badge&name=Magrel' target='_blank'>?type=badge&name=Magrel</a><br>\n";
 
 // echo "<h2>Page by Magrel</h2>\n";
 // echo "<h3>6. renderSimplePdf()</h3>\n";
