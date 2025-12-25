@@ -236,14 +236,14 @@ echo "</pre>";
 
 // === Примеры вызовов (для быстрой проверки — раскомментируй при необходимости) ===
 
-$id = addBook('Мастер и Маргарита', 'Михаил Булгаков', '978-5-17-114701-0', 1967);
-echo "<p>Добавлена книга с ID: $id</p>";
+// $id = addBook('Мастер и Маргарита', 'Михаил Булгаков', '978-5-17-114701-0', 1967);
+// echo "<p>Добавлена книга с ID: $id</p>";
 
-setBookAvailability($id, false);
-echo "<p>Книга ID=$id сделана недоступной</p>";
+// setBookAvailability($id, false);
+// echo "<p>Книга ID=$id сделана недоступной</p>";
 
-$books = findBooksByAuthor('Михаил Булгаков');
-echo "<pre>" . htmlspecialchars(print_r($books, true), ENT_QUOTES | ENT_HTML5, 'UTF-8') . "</pre>";
+// $books = findBooksByAuthor('Михаил Булгаков');
+// echo "<pre>" . htmlspecialchars(print_r($books, true), ENT_QUOTES | ENT_HTML5, 'UTF-8') . "</pre>";
 
 // Проверь transferStock — только если в таблице есть минимум 2 записи с available ≥ amount!
 // transferStock($id, 1, 1);
