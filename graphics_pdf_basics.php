@@ -287,19 +287,23 @@ function renderSimplePdf(string $message): void
 // ——————————————————————————————————————————————
 // 7–9. InvoicePdf: класс для генерации счёта
 // ——————————————————————————————————————————————
+
 /**
  * Расширенный генератор PDF-счёта с логотипом, таблицей, колонтитулами и гиперссылкой.
  */
 class InvoicePdf extends FPDF
 {
-    public function AddTtfFont(string $fontName, string $fontPath): void
+    /**
+     * Преобразует UTF-8 строку в Windows-1251 для FPDF.
+     *
+     * @param string $str Исходная строка в UTF-8
+     * @return string Строка в CP1251 (некорректные символы игнорируются)
+     */
+    private function utf8ToCp1251(string $str): string
     {
-        $this->AddFont($fontName, '', $fontPath);
-        $this->AddFont($fontName, 'B', $fontPath); // жирный
-        $this->AddFont($fontName, 'I', $fontPath); // курсив
-        $this->AddFont($fontName, 'BI', $fontPath); // жирный курсив
+        return iconv('UTF-8', 'CP1251//IGNORE', $str);
     }
-    
+
     /**
      * Верхний колонтитул: логотип слева, заголовок по центру.
      *
@@ -311,11 +315,8 @@ class InvoicePdf extends FPDF
         if (file_exists($logoPath)) {
             $this->Image($logoPath, 10, 10, 30);
         }
-
-        // Подключаем TTF-шрифт
-        $this->AddTtfFont('DejaVu', __DIR__ . '/arial.ttf'); // ← замени arial.ttf на DejaVuSans.ttf если есть
-        $this->SetFont('DejaVu', 'B', 16);
-        $this->Cell(0, 10, 'Счёт', 0, 1, 'C');
+        $this->SetFont('Arial', 'B', 16);
+        $this->Cell(0, 10, $this->utf8ToCp1251('Счёт'), 0, 1, 'C');
         $this->Ln(5);
     }
 
@@ -328,7 +329,7 @@ class InvoicePdf extends FPDF
     {
         $this->SetY(-15);
         $this->SetFont('Arial', 'I', 8);
-        $this->Cell(0, 10, 'Страница ' . $this->PageNo(), 0, 0, 'C');
+        $this->Cell(0, 10, $this->utf8ToCp1251('Страница ') . $this->PageNo(), 0, 0, 'C');
     }
 
     /**
@@ -345,7 +346,7 @@ class InvoicePdf extends FPDF
 
         foreach ($header as $i => $col) {
             $w = $colWidths[$i] ?? 40;
-            $this->Cell($w, 7, $col, 1, 0, 'C');
+            $this->Cell($w, 7, $this->utf8ToCp1251($col), 1, 0, 'C');
         }
         $this->Ln();
 
@@ -353,7 +354,7 @@ class InvoicePdf extends FPDF
         foreach ($data as $row) {
             foreach ($row as $i => $cell) {
                 $w = $colWidths[$i] ?? 40;
-                $this->Cell($w, 6, $cell, 1, 0, 'L');
+                $this->Cell($w, 6, $this->utf8ToCp1251($cell), 1, 0, 'L');
             }
             $this->Ln();
         }
@@ -375,7 +376,7 @@ class InvoicePdf extends FPDF
 
         $this->SetFont('Arial', 'U', 10);
         $this->SetTextColor(0, 0, 255);
-        $linkText = 'Посетить сайт';
+        $linkText = $this->utf8ToCp1251('Посетить сайт');
         $this->Write(5, $linkText);
         $this->Link(
             $this->GetX() - $this->GetStringWidth($linkText),
@@ -389,6 +390,109 @@ class InvoicePdf extends FPDF
         exit;
     }
 }
+
+/**
+ * Расширенный генератор PDF-счёта с логотипом, таблицей, колонтитулами и гиперссылкой.
+ */
+// class InvoicePdf extends FPDF
+// {
+//     public function AddTtfFont(string $fontName, string $fontPath): void
+//     {
+//         $this->AddFont($fontName, '', $fontPath);
+//         $this->AddFont($fontName, 'B', $fontPath); // жирный
+//         $this->AddFont($fontName, 'I', $fontPath); // курсив
+//         $this->AddFont($fontName, 'BI', $fontPath); // жирный курсив
+//     }
+    
+//     /**
+//      * Верхний колонтитул: логотип слева, заголовок по центру.
+//      *
+//      * @return void
+//      */
+//     public function Header(): void
+//     {
+//         $logoPath = __DIR__ . '/logo.png';
+//         if (file_exists($logoPath)) {
+//             $this->Image($logoPath, 10, 10, 30);
+//         }
+
+//         // Подключаем TTF-шрифт
+//         $this->AddTtfFont('DejaVu', __DIR__ . '/arial.ttf'); // ← замени arial.ttf на DejaVuSans.ttf если есть
+//         $this->SetFont('DejaVu', 'B', 16);
+//         $this->Cell(0, 10, 'Счёт', 0, 1, 'C');
+//         $this->Ln(5);
+//     }
+
+//     /**
+//      * Нижний колонтитул: номер страницы по центру.
+//      *
+//      * @return void
+//      */
+//     public function Footer(): void
+//     {
+//         $this->SetY(-15);
+//         $this->SetFont('Arial', 'I', 8);
+//         $this->Cell(0, 10, 'Страница ' . $this->PageNo(), 0, 0, 'C');
+//     }
+
+//     /**
+//      * Рисует таблицу с рамками.
+//      *
+//      * @param array $header Массив заголовков (строки)
+//      * @param array $data Массив строк (каждая — массив ячеек)
+//      * @return void
+//      */
+//     public function buildTable(array $header, array $data): void
+//     {
+//         $this->SetFont('Arial', 'B', 10);
+//         $colWidths = [80, 40, 40, 30];
+
+//         foreach ($header as $i => $col) {
+//             $w = $colWidths[$i] ?? 40;
+//             $this->Cell($w, 7, $col, 1, 0, 'C');
+//         }
+//         $this->Ln();
+
+//         $this->SetFont('Arial', '', 10);
+//         foreach ($data as $row) {
+//             foreach ($row as $i => $cell) {
+//                 $w = $colWidths[$i] ?? 40;
+//                 $this->Cell($w, 6, $cell, 1, 0, 'L');
+//             }
+//             $this->Ln();
+//         }
+//     }
+
+//     /**
+//      * Генерирует и отправляет PDF-счёт с таблицей и гиперссылкой.
+//      *
+//      * @param array $items Массив строк [['Товар', 'Кол-во', 'Цена', 'Сумма'], ...]
+//      * @return void
+//      */
+//     public function renderInvoice(array $items): void
+//     {
+//         $this->AddPage();
+//         $header = ['Товар', 'Кол-во', 'Цена', 'Сумма'];
+//         $this->buildTable($header, $items);
+
+//         $this->Ln(10);
+
+//         $this->SetFont('Arial', 'U', 10);
+//         $this->SetTextColor(0, 0, 255);
+//         $linkText = 'Посетить сайт';
+//         $this->Write(5, $linkText);
+//         $this->Link(
+//             $this->GetX() - $this->GetStringWidth($linkText),
+//             $this->GetY() - 5,
+//             $this->GetStringWidth($linkText),
+//             5,
+//             'https://example.com'
+//         );
+
+//         $this->Output();
+//         exit;
+//     }
+// }
 
 // ——————————————————————————————————————————————
 // 10. Итоговое домашнее задание: badge и invoice
