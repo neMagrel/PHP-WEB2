@@ -490,36 +490,71 @@ function runHomework(): void
     }
 }
 
+runHomework();
+
 // ——————————————————————————————————————————————
-// Тестирование (в стиле Magrel)
+// Только если не был отправлен ответ — выводим HTML-страницу
 // ——————————————————————————————————————————————
-echo "<h2>Page by Magrel</h2>\n";
-echo "<h3>1. renderBlackSquare()</h3>\n";
-echo "Прямой вызов: <a href='?type=black-square' target='_blank'>?type=black-square</a><br>\n";
+if (!headers_sent()) {
+    echo "<h2>Page by Magrel</h2>\n";
+    echo "<h3>1. renderBlackSquare()</h3>\n";
+    echo "Прямой вызов: <a href='?type=black-square' target='_blank'>?type=black-square</a><br>\n";
 
-echo "<h2>Page by Magrel</h2>\n";
-echo "<h3>2. renderTextImage()</h3>\n";
-echo "Пример: <a href='?type=text&value=Hello+World' target='_blank'>?type=text&value=Hello+World</a><br>\n";
+    echo "<h2>Page by Magrel</h2>\n";
+    echo "<h3>2. renderTextImage()</h3>\n";
+    echo "Пример: <a href='?type=text&value=Hello+World' target='_blank'>?type=text&value=Hello+World</a><br>\n";
 
-echo "<h2>Page by Magrel</h2>\n";
-echo "<h3>3. renderTtfText()</h3>\n";
-echo "Пример (требуется arial.ttf): <a href='?type=ttf&value=Тест+TTF' target='_blank'>?type=ttf&value=Тест+TTF</a><br>\n";
+    echo "<h2>Page by Magrel</h2>\n";
+    echo "<h3>3. renderTtfText()</h3>\n";
+    echo "Пример (требуется arial.ttf): <a href='?type=ttf&value=Тест+TTF' target='_blank'>?type=ttf&value=Тест+TTF</a><br>\n";
 
-echo "<h2>Page by Magrel</h2>\n";
-echo "<h3>4. renderButton()</h3>\n";
-echo "Пример (требуется badge-bg.png): <a href='?type=button&value=Купи+меня' target='_blank'>?type=button&value=Купи+меня</a><br>\n";
+    echo "<h2>Page by Magrel</h2>\n";
+    echo "<h3>4. renderButton()</h3>\n";
+    echo "Пример (требуется badge-bg.png): <a href='?type=button&value=Купи+меня' target='_blank'>?type=button&value=Купи+меня</a><br>\n";
 
-echo "<h2>Page by Magrel</h2>\n";
-echo "<h3>5. getCachedImageOrGenerate() + renderBadge()</h3>\n";
-echo "Значок: <a href='?type=badge&name=Алексей' target='_blank'>?type=badge&name=Алексей</a><br>\n";
+    echo "<h2>Page by Magrel</h2>\n";
+    echo "<h3>5. getCachedImageOrGenerate() + renderBadge()</h3>\n";
+    echo "Значок: <a href='?type=badge&name=Алексей' target='_blank'>?type=badge&name=Алексей</a><br>\n";
 
-echo "<h2>Page by Magrel</h2>\n";
-echo "<h3>6. renderSimplePdf()</h3>\n";
-echo "PDF: <a href='?type=simple-pdf' target='_blank'>?type=simple-pdf</a><br>\n";
+    echo "<h2>Page by Magrel</h2>\n";
+    echo "<h3>6. renderSimplePdf()</h3>\n";
+    echo "PDF: <a href='?type=simple-pdf' target='_blank'>?type=simple-pdf</a><br>\n";
 
-echo "<h2>Page by Magrel</h2>\n";
-echo "<h3>7–9. InvoicePdf::renderInvoice()</h3>\n";
-echo "Счёт: <a href='?type=invoice' target='_blank'>?type=invoice</a><br>\n";
+    echo "<h2>Page by Magrel</h2>\n";
+    echo "<h3>7–9. InvoicePdf::renderInvoice()</h3>\n";
+    echo "Счёт: <a href='?type=invoice' target='_blank'>?type=invoice</a><br>\n";
+}
+
+// // ——————————————————————————————————————————————
+// // Тестирование (в стиле Magrel)
+// // ——————————————————————————————————————————————
+// echo "<h2>Page by Magrel</h2>\n";
+// echo "<h3>1. renderBlackSquare()</h3>\n";
+// echo "Прямой вызов: <a href='?type=black-square' target='_blank'>?type=black-square</a><br>\n";
+
+// echo "<h2>Page by Magrel</h2>\n";
+// echo "<h3>2. renderTextImage()</h3>\n";
+// echo "Пример: <a href='?type=text&value=Hello+World' target='_blank'>?type=text&value=Hello+World</a><br>\n";
+
+// echo "<h2>Page by Magrel</h2>\n";
+// echo "<h3>3. renderTtfText()</h3>\n";
+// echo "Пример (требуется arial.ttf): <a href='?type=ttf&value=Тест+TTF' target='_blank'>?type=ttf&value=Тест+TTF</a><br>\n";
+
+// echo "<h2>Page by Magrel</h2>\n";
+// echo "<h3>4. renderButton()</h3>\n";
+// echo "Пример (требуется badge-bg.png): <a href='?type=button&value=Купи+меня' target='_blank'>?type=button&value=Купи+меня</a><br>\n";
+
+// echo "<h2>Page by Magrel</h2>\n";
+// echo "<h3>5. getCachedImageOrGenerate() + renderBadge()</h3>\n";
+// echo "Значок: <a href='?type=badge&name=Алексей' target='_blank'>?type=badge&name=Алексей</a><br>\n";
+
+// echo "<h2>Page by Magrel</h2>\n";
+// echo "<h3>6. renderSimplePdf()</h3>\n";
+// echo "PDF: <a href='?type=simple-pdf' target='_blank'>?type=simple-pdf</a><br>\n";
+
+// echo "<h2>Page by Magrel</h2>\n";
+// echo "<h3>7–9. InvoicePdf::renderInvoice()</h3>\n";
+// echo "Счёт: <a href='?type=invoice' target='_blank'>?type=invoice</a><br>\n";
 
 // ——————————————————————————————————————————————
 // Примеры вызовов (раскомментируйте для быстрой проверки)
