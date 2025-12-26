@@ -168,7 +168,7 @@ echo "<h2>Page by Magrel</h2>\n";
 // 1. Person
 echo "<h3>1. Person</h3>\n";
 $p1 = new Person();
-$p1->name = "Алексей";
+$p1->name = "Глеб";
 $p1->age = 20;
 $p2 = new Person();
 $p2->name = "Мария";
