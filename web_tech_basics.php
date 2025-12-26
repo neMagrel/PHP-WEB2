@@ -50,14 +50,15 @@ function dumpRequestInfo(): void
 /**
  * Возвращает структурированные данные о текущем HTTP-запросе.
  *
+ * Все строки в get/post/server_info экранируются для безопасного вывода.
+ *
  * @return array Ассоциативный массив с ключами:
  *   - 'method': string — метод запроса
- *   - 'get': array — копия $_GET
- *   - 'post': array — копия $_POST
+ *   - 'get': array — копия $_GET с экранированными значениями
+ *   - 'post': array — копия $_POST с экранированными значениями
  *   - 'server_info': array — данные сервера (HTTP_HOST, SERVER_NAME, HTTPS)
  */
-function getRequestData(): array
-{
+function getRequestData(): array {
     $serverInfo = [
         'HTTP_HOST' => $_SERVER['HTTP_HOST'] ?? '',
         'SERVER_NAME' => $_SERVER['SERVER_NAME'] ?? '',
@@ -67,10 +68,21 @@ function getRequestData(): array
         $serverInfo['HTTPS'] = $_SERVER['HTTPS'];
     }
 
+    // Экранируем значения в GET и POST
+    $getSafe = [];
+    foreach ($_GET as $key => $value) {
+        $getSafe[$key] = is_string($value) ? htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8') : $value;
+    }
+
+    $postSafe = [];
+    foreach ($_POST as $key => $value) {
+        $postSafe[$key] = is_string($value) ? htmlspecialchars($value, ENT_QUOTES | ENT_HTML5, 'UTF-8') : $value;
+    }
+
     return [
         'method' => $_SERVER['REQUEST_METHOD'] ?? 'UNKNOWN',
-        'get' => $_GET,
-        'post' => $_POST,
+        'get' => $getSafe,
+        'post' => $postSafe,
         'server_info' => $serverInfo,
     ];
 }
@@ -373,8 +385,14 @@ $cart->addItem(['id' => 2, 'name' => 'Безопасность', 'price' => 149]
 // Устанавливаем тему по умолчанию как 'dark' (для демонстрации)
 setThemeCookie('dark');
 
-// Генерируем токен один раз для всех форм
-$csrfToken = generateCsrfToken();
+// Генерируем CSRF-токен только при первом загрузке страницы (GET)
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    $csrfToken = generateCsrfToken();
+} else {
+    // При POST — берём токен из сессии, если он есть
+    $csrfToken = $_SESSION['csrf_token'] ?? '';
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
